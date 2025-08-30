@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger("azure").setLevel(logging.INFO)
 
 async def main():
-    bsc = BlobServiceClient.from_connection_string(CONN_STR)
+    bsc = BlobServiceClient.from_connection_string(CONN_STR, max_block_size=20 * 1024 * 1024)
     container = bsc.get_container_client(CONTAINER)
 
     name = f"{DEST_PREFIX.rstrip('/')}/{Path(LOCAL_FILE).name}"
