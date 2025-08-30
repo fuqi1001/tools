@@ -26,12 +26,13 @@ async def main():
     container = bsc.get_container_client(CONTAINER)
 
     name = f"{DEST_PREFIX.rstrip('/')}/{Path(LOCAL_FILE).name}"
-
+    size = os.stat(LOCAL_FILE).st_size
     async with aiofiles.open(LOCAL_FILE, "rb") as data:
         wrapper = AsyncNoSeek(data)
         await container.upload_blob(
             name=name,
             data=wrapper,
+            length=size,
             overwrite=True,
             max_concurrency=MAX_CONC,
             standard_blob_tier=StandardBlobTier(BLOB_TIER.capitalize()) if BLOB_TIER else None,
